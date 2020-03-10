@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>ObjectivePGP | OpenPGP library for iOS and macOS</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="ObjectivePGP" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="OpenPGP library for iOS and macOS" />
+<meta property="og:description" content="OpenPGP library for iOS and macOS" />
+<link rel="canonical" href="https://objectivepgp.com/" />
+<meta property="og:url" content="https://objectivepgp.com/" />
+<meta property="og:site_name" content="ObjectivePGP" />
+<script type="application/ld+json">
+{"headline":"ObjectivePGP","@type":"WebSite","url":"https://objectivepgp.com/","name":"ObjectivePGP","description":"OpenPGP library for iOS and macOS","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="/assets/css/style.css?v=0867be87d242c7cab0ee6a0b4ebd36e8ba811447">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">ObjectivePGP</h1>
+      <h2 class="project-tagline">OpenPGP library for iOS and macOS</h2>
+      
+        <a href="https://github.com/krzyzanowskim/ObjectivePGP" class="btn">View on GitHub</a>
+      
+      
+    </section>
+
+    <section class="main-content">
+      <p><img src="https://user-images.githubusercontent.com/758033/27697465-a355ca34-5cf4-11e7-9470-ee1ee98eedd9.png" alt="objectivepgp" /></p>
+
+<p><a href="https://cocoapods.org/pods/ObjectivePGP"><img src="https://img.shields.io/cocoapods/v/ObjectivePGP.svg" alt="CocoaPods Compatible" /></a>
+<a href="http://cocoadocs.org/docsets/ObjectivePGP"><img src="https://img.shields.io/cocoapods/p/ObjectivePGP.svg?style=flat" alt="Platform" /></a>
+<a href="./ObjectivePGP.playground/Contents.swift"><img src="https://img.shields.io/badge/swift-supported-brightgreen.svg?style=flat" alt="Swift" /></a>
+<a href="http://twitter.com/krzyzanowskim"><img src="https://img.shields.io/badge/twitter-@krzyzanowskim-blue.svg?style=flat" alt="Twitter" /></a></p>
+
+<p><strong>ObjectivePGP</strong> is an implementation of <a href="https://en.wikipedia.org/wiki/Pretty_Good_Privacy#OpenPGP">OpenPGP</a> protocol for iOS and macOS. OpenPGP is the most widely used email encryption standard. It is defined by the OpenPGP Working Group of the Internet Engineering Task Force (IETF).</p>
+
+<p>Here is the <a href="http://blog.krzyzanowskim.com/2014/07/31/short-story-about-openpgp-for-ios-and-os-x-objectivepgp/">blog post</a> story.</p>
+
+<h2 id="how-do-i-get-involved">How do I get involved?</h2>
+
+<p>You want to help, great! Go ahead and fork our repo, make your changes and send us a pull request.</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>You are welcome to contribute. See <a href="https://github.com/krzyzanowskim/ObjectivePGP/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a><br />
+Please create <a href="https://github.com/krzyzanowskim/ObjectivePGP/pulls">Pull Request</a>.</p>
+
+<h2 id="the-license">The license</h2>
+
+<p>The ObjectivePGP stays under a dual license:</p>
+
+<ul>
+  <li>
+    <p>Free for non-commercial use, covered by the variant of BSD license. That means you have to mention Marcin Krzyżanowski as the original author of this code and reproduce the <a href="/LICENSE.txt">LICENSE</a> text inside your app.</p>
+  </li>
+  <li>
+    <p>Commercial-use license to use in commercial products. Please bear in mind that some free products remain commercial products. Please contact me via <a href="http://www.krzyzanowskim.com">email</a> for details.</p>
+  </li>
+</ul>
+
+<p>Not sure what to choose? check <a href="https://github.com/krzyzanowskim/ObjectivePGP/wiki/FAQ">FAQ</a></p>
+
+<h2 id="usage">Usage</h2>
+
+<pre><code class="language-objective-c">#import &lt;ObjectivePGP/ObjectivePGP.h&gt;
+</code></pre>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">import</span> <span class="kt">ObjectivePGP</span>
+</code></pre></div></div>
+
+<h5 id="read-keys-private-or-public">Read keys (private or public)</h5>
+
+<pre><code class="language-objective-c">NSArray&lt;PGPKey *&gt; *keys = [ObjectivePGP readKeysFromPath:@"/path/to/key.asc" error:nil];
+</code></pre>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">keys</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">ObjectivePGP</span><span class="o">.</span><span class="nf">readKeys</span><span class="p">(</span><span class="nv">fromPath</span><span class="p">:</span> <span class="s">"/path/to/key.asc"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h5 id="keyring">Keyring</h5>
+
+<p>Keyring is a storage (in memory or on disk) that keep all sorts of PGP keys.</p>
+
+<pre><code class="language-objective-c">PGPKeyring *keyring = ObjectivePGP.defaultKeyring;
+PGPKeyring *keyring = [[PGPKeyring alloc] init];
+
+NSArray&lt;PGPKey *&gt; *allKeys = keyring.keys;
+[keyring importKeys:@[key]];
+[keyring deleteKeys:@[key]];
+
+[keyring importKey:@"979E4B03DFFE30C6" fromPath:@"/path/to/secring.gpg"];
+PGPKey *key = [keyring findKeyWithIdentifier:@"979E4B03DFFE30C6"];
+NSArray&lt;PGPKey *&gt; keys = [pgp findKeysForUserID:@"Name &lt;email@example.com&gt;"];
+</code></pre>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">keyring</span> <span class="o">=</span> <span class="kt">ObjectivePGP</span><span class="o">.</span><span class="n">defaultKeyring</span>
+<span class="k">let</span> <span class="nv">keyring</span> <span class="o">=</span> <span class="kt">Keyring</span><span class="p">()</span>
+
+<span class="k">let</span> <span class="nv">allKeys</span> <span class="o">=</span> <span class="n">keyring</span><span class="o">.</span><span class="n">keys</span>
+<span class="n">keyring</span><span class="o">.</span><span class="nf">import</span><span class="p">(</span><span class="nv">keys</span><span class="p">:</span> <span class="p">[</span><span class="n">key</span><span class="p">])</span>
+<span class="n">keyring</span><span class="o">.</span><span class="nf">delete</span><span class="p">(</span><span class="nv">keys</span><span class="p">:</span> <span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+<span class="n">keyring</span><span class="o">.</span><span class="nf">import</span><span class="p">(</span><span class="nv">keyIdentifier</span><span class="p">:</span><span class="s">"979E4B03DFFE30C6"</span><span class="p">,</span> <span class="nv">fromPath</span><span class="p">:</span><span class="s">"/path/to/secring.gpg"</span><span class="p">)</span>
+<span class="k">if</span> <span class="k">let</span> <span class="nv">key</span> <span class="o">=</span> <span class="n">keyring</span><span class="o">.</span><span class="nf">findKey</span><span class="p">(</span><span class="s">"979E4B03DFFE30C6"</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// key found in keyring</span>
+<span class="p">}</span>
+
+<span class="n">keyring</span><span class="o">.</span><span class="nf">findKeys</span><span class="p">(</span><span class="s">"Name &lt;email@example.com&gt;"</span><span class="p">)</span><span class="o">.</span><span class="nf">forEach</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// process key</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="export-keys-private-or-public">Export keys (private or public)</h5>
+
+<pre><code class="language-objective-c">// Write keyring to file
+[[keyring export:error] writeToURL:[NSURL fileURLWithString:@"keyring.gpg"]];
+
+// Public keys data
+NSData *publicKeys = [keyring exportKeysOfType:PGPKeyTypePublic error:nil];
+</code></pre>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Write keyring to file</span>
+<span class="k">try</span> <span class="n">keyring</span><span class="o">.</span><span class="nf">export</span><span class="p">()</span><span class="o">.</span><span class="nf">write</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">fileURLWithPath</span><span class="p">:</span> <span class="s">"keyring.gpg"</span><span class="p">))</span>
+
+<span class="c1">// Public keys (Data)</span>
+<span class="k">let</span> <span class="nv">publicKeys</span> <span class="o">=</span> <span class="n">keyring</span><span class="o">.</span><span class="nf">exportKeys</span><span class="p">(</span><span class="nv">of</span><span class="p">:</span> <span class="o">.</span><span class="kd">public</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h5 id="sign--verify-data-or-file">Sign &amp; verify data (or file)</h5>
+
+<p>Sign a data with a key:</p>
+
+<pre><code class="language-objective-c">NSData *signature = [ObjectivePGP sign:fileContent detached:YES usingKeys:@[key] passphraseForKey:nil error:nil];
+[ObjectivePGP verify:fileContent withSignature:signature usingKeys:@[key] passphraseForKey:nil error:nil];
+</code></pre>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">signature</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">ObjectivePGP</span><span class="o">.</span><span class="nf">sign</span><span class="p">(</span><span class="n">encryptedBin</span><span class="p">,</span> <span class="nv">detached</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span> <span class="nv">using</span><span class="p">:</span> <span class="p">[</span><span class="n">key1</span><span class="p">])</span>
+<span class="k">try</span> <span class="kt">ObjectivePGP</span><span class="o">.</span><span class="nf">verify</span><span class="p">(</span><span class="n">encryptedBin</span><span class="p">,</span> <span class="nv">withSignature</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span> <span class="nv">using</span><span class="p">:</span> <span class="p">[</span><span class="n">key1</span><span class="p">])</span>
+</code></pre></div></div>
+
+<h5 id="encrypt--decrypt">Encrypt &amp; Decrypt</h5>
+
+<pre><code class="language-objective-c">NSData *encrypted = [ObjectivePGP encrypt:fileContent addSignature:YES usingKeys:@[key] passphraseForKey:nil error:nil];
+[ObjectivePGP decrypt:encrypted andVerifySignature:YES usingKeys:@[key] passphraseForKey:nil error:nil];
+</code></pre>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">encrypted</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">ObjectivePGP</span><span class="o">.</span><span class="nf">encrypt</span><span class="p">(</span><span class="n">fileContent</span><span class="p">),</span> <span class="nv">addSignature</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">using</span><span class="p">:</span> <span class="p">[</span><span class="n">key1</span><span class="p">,</span> <span class="n">key2</span><span class="p">])</span>
+<span class="k">let</span> <span class="nv">decrypted</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">ObjectivePGP</span><span class="o">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">,</span> <span class="nv">andVerifySignature</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">using</span><span class="p">:</span> <span class="p">[</span><span class="n">key1</span><span class="p">])</span>
+</code></pre></div></div>
+
+<h5 id="generate-new-key-pair">Generate new key pair</h5>
+
+<pre><code class="language-objective-c">PGPKeyGenerator *generator = [[PGPKeyGenerator alloc] init];
+PGPKey *key = [generator generateFor:@"Marcin &lt;marcin@example.com&gt;" passphrase:nil];
+NSData *publicKeyData = [key export:PGPKeyTypePublic error:nil];
+NSData *secretKeyData = [key export:PGPKeyTypeSecret error:nil];
+</code></pre>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">key</span> <span class="o">=</span> <span class="kt">KeyGenerator</span><span class="p">()</span><span class="o">.</span><span class="nf">generate</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="s">"marcin@example.com"</span><span class="p">,</span> <span class="nv">passphrase</span><span class="p">:</span> <span class="s">"password"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">publicKey</span> <span class="o">=</span> <span class="k">try</span> <span class="n">key</span><span class="o">.</span><span class="nf">export</span><span class="p">(</span><span class="nv">keyType</span><span class="p">:</span> <span class="o">.</span><span class="kd">public</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">secretKey</span> <span class="o">=</span> <span class="k">try</span> <span class="n">key</span><span class="o">.</span><span class="nf">export</span><span class="p">(</span><span class="nv">keyType</span><span class="p">:</span> <span class="o">.</span><span class="n">secret</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="ascii-armor">ASCII Armor</h4>
+
+<p>ASCII armor is a binary-to-textual encoding converter. ASCII armor involves encasing encrypted messaging in ASCII so that they can be sent in a standard messaging format such as email.</p>
+
+<p>Example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-----BEGIN PGP PUBLIC KEY BLOCK-----
+Comment: For more info see http://www.objectivepgp.org
+
+[...]
+-----END PGP PUBLIC KEY BLOCK-----
+</code></pre></div></div>
+
+<p>Class <code class="language-plaintext highlighter-rouge">PGPArmor</code> can be used to convert binary format to ASCII format</p>
+
+<pre><code class="language-objective-c">NSString *armoredKey = [PGPArmor armoredData:encrypted as:PGPArmorPublicKey];
+</code></pre>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">armoredKey</span> <span class="o">=</span> <span class="kt">Armor</span><span class="o">.</span><span class="nf">armored</span><span class="p">(</span><span class="kt">Data</span><span class="p">(),</span> <span class="nv">as</span><span class="p">:</span> <span class="o">.</span><span class="n">publicKey</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>When convert manually, it is important to use right <code class="language-plaintext highlighter-rouge">PGPArmorType</code> value that define the header. It may be a tricky part so here’s the cheatsheet:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type data</th>
+      <th>PGPArmorType</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Encrypted</td>
+      <td><code class="language-plaintext highlighter-rouge">PGPArmorMessage</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Armor.armored(ObjectivePGP.encrypt(...), as: .message)</code></td>
+    </tr>
+    <tr>
+      <td>Decrypted</td>
+      <td><code class="language-plaintext highlighter-rouge">PGPArmorMessage</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Armor.armored(ObjectivePGP.decrypt(...), as: .message)</code></td>
+    </tr>
+    <tr>
+      <td>Public key</td>
+      <td><code class="language-plaintext highlighter-rouge">PGPArmorTypePublic</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Armor.armored(key.export(), as: .publicKey)</code></td>
+    </tr>
+    <tr>
+      <td>Secret key</td>
+      <td><code class="language-plaintext highlighter-rouge">PGPArmorTypeSecret</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Armor.armored(key.export(), as: .secretKey)</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For any result of encryption the type is <code class="language-plaintext highlighter-rouge">PGPArmorMessage</code></p>
+
+<h2 id="installation">Installation</h2>
+
+<h4 id="cocoapods"><a href="https://cocoapods.org/pods/ObjectivePGP">CocoaPods</a></h4>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">target</span> <span class="s1">'TargetName'</span> <span class="k">do</span>
+    <span class="n">use_frameworks!</span>
+    <span class="n">pod</span> <span class="s1">'ObjectivePGP'</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h4 id="objectivepgpframework">ObjectivePGP.framework</h4>
+
+<p>ObjectivePGP comes with the <a href="./Frameworks">Frameworks</a> for the latest release.</p>
+
+<ol>
+  <li>Download latest <a href="https://github.com/krzyzanowskim/ObjectivePGP/releases">ObjectivePGP.framework</a> or build a framework with the <a href="/scripts/build-frameworks.sh">build-frameworks.sh</a> script.</li>
+  <li>Add a New Copy Files Phase by selecting the Add icon, highlighted in Figure 4. Set the Destination field to Frameworks, and add the framework to the list (see <a href="https://developer.apple.com/library/content/technotes/tn2435/_index.html">Embedding Frameworks In An App</a>). Ensure Code Sign on Copy is checked.
+<img src="https://user-images.githubusercontent.com/14152377/35073501-5b50bc50-fbe9-11e7-8d8a-3c8ce47c8e44.png" alt="Figure 4" /></li>
+  <li>Link framework with the target
+    <ul>
+      <li>Add <code class="language-plaintext highlighter-rouge">ObjectivePGP.framework</code> to “<strong>Link Binary With Libraries</strong>” list for the target.
+ <img src="https://user-images.githubusercontent.com/758033/27715926-d79a4e3c-5d3a-11e7-8b1b-d8b5ddb8182e.png" alt="screen shot 2017-06-30 at 02 20 47" /></li>
+    </ul>
+  </li>
+  <li>Link libraries and frameworks
+    <ol>
+      <li>Add <code class="language-plaintext highlighter-rouge">Security.framework</code> to “<strong>Link Binary With Libraries</strong>” list for the target. These are system libraries.</li>
+      <li>Add <code class="language-plaintext highlighter-rouge">libz</code> and <code class="language-plaintext highlighter-rouge">libbz2</code> to “<strong>Link Binary With Libraries</strong>” list for the target. These are system libraries.</li>
+    </ol>
+  </li>
+  <li>In the Build Phases tab, click the + button at the top and select “New Run Script Phase”. Enter the following code into the script text field:</li>
+</ol>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash <span class="s2">"</span><span class="k">${</span><span class="nv">BUILT_PRODUCTS_DIR</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">FRAMEWORKS_FOLDER_PATH</span><span class="k">}</span><span class="s2">/ObjectivePGP.framework/strip-frameworks.sh"</span>
+</code></pre></div></div>
+
+<p>(The last step, is required for working around an iOS App Store bug when archiving universal binaries.)</p>
+
+<h2 id="changelog">Changelog</h2>
+
+<p>See <a href="/CHANGELOG">CHANGELOG</a></p>
+
+<p>Known limitations:</p>
+
+<ul>
+  <li>Cleartext signature.</li>
+</ul>
+
+<h2 id="security-audit">Security Audit</h2>
+
+<p>To date the ObjectivePGP code base has undergone a complete security audit from <a href="https://cure53.de/">Cure53</a>.</p>
+
+<h3 id="acknowledgment">Acknowledgment</h3>
+
+<p>This product uses software developed by the <a href="http://www.openssl.org/">OpenSSL</a> Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)</p>
+
+<h3 id="author">Author</h3>
+
+<p><a href="http://krzyzanowskim.com">Marcin Krzyżanowski</a></p>
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/krzyzanowskim/ObjectivePGP">ObjectivePGP</a> is maintained by <a href="https://github.com/krzyzanowskim">krzyzanowskim</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </section>
+
+    
+  </body>
+</html>
